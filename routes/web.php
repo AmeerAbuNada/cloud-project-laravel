@@ -29,37 +29,43 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::redirect('/', '/login');
+Route::middleware('completeRegistration')->group(function () {
+    Route::redirect('/', '/login');
 
-//Authenticated Routes
-Route::middleware('auth')->group(function () {
-    //Account Settings
-    Route::view('/', 'crm.parent')->name('crm.home');
-    Route::prefix('/account-settings')->controller(AccountSettingsController::class)->group(function () {
-        Route::get('/profile', 'showProfile')->name('account.profile');
-        Route::get('/info', 'showGeneralInfo')->name('account.general-info');
-        Route::put('/info', 'updateGeneralInfo')->name('account.update-general-info');
-        Route::get('/change-password', 'showChangePassword')->name('account.change-password');
-        Route::put('/change-password', 'changePassword')->name('account.update-change-password');
+    //Authenticated Routes
+    Route::middleware('auth')->group(function () {
+        //Account Settings
+        Route::view('/', 'crm.parent')->name('crm.home');
+        Route::prefix('/account-settings')->controller(AccountSettingsController::class)->group(function () {
+            Route::withoutMiddleware('completeRegistration')->get('/profile', 'showProfile')->name('account.profile');
+            Route::withoutMiddleware('completeRegistration')->put('/profile/complete', 'completeRegistration')->name('account.complete-registration');
+            Route::get('/info', 'showGeneralInfo')->name('account.general-info');
+            Route::put('/info', 'updateGeneralInfo')->name('account.update-general-info');
+            Route::get('/change-password', 'showChangePassword')->name('account.change-password');
+            Route::put('/change-password', 'changePassword')->name('account.update-change-password
+            ');
+            Route::get('/accomplishments', 'accomplishments')->name('account.accomplishments');
+            Route::put('/accomplishments', 'updateAccomplishments')->name('account.update-accomplishments');
+        });
     });
-});
 
-//Logout Route
-Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+    //Logout Route
+    Route::withoutMiddleware('completeRegistration')->get('/logout', [LoginController::class, 'logout'])->name('logout');
 
-//Guest Routes
-Route::middleware('guest')->group(function () {
-    //Login Routes
-    Route::get('/login', [LoginController::class, 'showLogin'])->name('login');
-    Route::post('/login', [LoginController::class, 'login'])->name('login.post');
-    Route::get('/register', [LoginController::class, 'showRegister'])->name('register');
-    Route::post('/register', [LoginController::class, 'register'])->name('register.post');
+    //Guest Routes
+    Route::middleware('guest')->group(function () {
+        //Login Routes
+        Route::get('/login', [LoginController::class, 'showLogin'])->name('login');
+        Route::post('/login', [LoginController::class, 'login'])->name('login.post');
+        Route::get('/register', [LoginController::class, 'showRegister'])->name('register');
+        Route::post('/register', [LoginController::class, 'register'])->name('register.post');
 
-    //Reset Password Routes
-    Route::controller(ResetPasswordController::class)->group(function () {
-        Route::get('/forgot-password', 'showForgotPassword')->name('password.request');
-        Route::post('/forgot-password', 'forgotPassword')->name('password.email');
-        Route::get('/reset-password/{token}', 'showResetPassword')->name('password.reset');
-        Route::post('/reset-password', 'resetPassword')->name('password.update');
+        //Reset Password Routes
+        Route::controller(ResetPasswordController::class)->group(function () {
+            Route::get('/forgot-password', 'showForgotPassword')->name('password.request');
+            Route::post('/forgot-password', 'forgotPassword')->name('password.email');
+            Route::get('/reset-password/{token}', 'showResetPassword')->name('password.reset');
+            Route::post('/reset-password', 'resetPassword')->name('password.update');
+        });
     });
 });

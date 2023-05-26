@@ -143,8 +143,72 @@
                 </div>
                 <!-- /.col -->
             </div>
-            <!-- /.row -->
-        </div><!-- /.container-fluid -->
+            @if (!auth()->user()->IsRegistrationComplete)
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-default">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    Alert
+                                </h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <div class="alert alert-danger alert-dismissible">
+                                    <button type="button" class="close" data-dismiss="alert"
+                                        aria-hidden="true">×</button>
+                                    <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                                    Please Complete Your Registration
+                                </div>
+                                <form class="form-horizontal" onsubmit="event.preventDefault(); completeRegistration();">
+                                    <div class="form-group row">
+                                        <label for="id-card" class="col-sm-2 col-form-label">Id Card</label>
+                                        <div class="col-sm-10">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="id-card">
+                                                <label class="custom-file-label" for="exampleInputFile">Choose
+                                                    File</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="offset-sm-2 col-sm-10">
+                                            <button type="submit" class="btn btn-primary"
+                                                id="submit-button">Complete</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+
+                </div>
+            @endif
+            @if (auth()->user()->accomplishments)
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-default">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    Accomplishments
+                                </h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+
+                                {!! auth()->user()->accomplishments !!}
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+
+                </div>
+            @endif
+        </div>
     </section>
 @endsection
 
@@ -163,5 +227,18 @@
             post("{{ route('account.update-general-info') }}", formData, "submit-button", undefined,
                 "{{ URL::current() }}")
         }
+
+        @if (!auth()->user()->IsRegistrationComplete)
+            function completeRegistration() {
+                let formData = new FormData();
+                formData.append('_method', 'PUT');
+                if (document.getElementById('id-card').files.length > 0) {
+                    formData.append('id_card', document.getElementById('id-card').files[0]);
+                }
+
+                post("{{ route('account.complete-registration') }}", formData, "submit-button", undefined,
+                    "{{ URL::current() }}")
+            }
+        @endif
     </script>
 @endsection

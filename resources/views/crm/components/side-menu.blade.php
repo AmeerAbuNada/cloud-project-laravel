@@ -56,6 +56,15 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('account.accomplishments') }}"
+                        class="nav-link {{ request()->routeIs('account.accomplishments') ? 'active' : '' }}">
+                        <i class="nav-icon fad fa-key"></i>
+                        <p>
+                            Accomplishments
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('account.change-password') }}"
                         class="nav-link {{ request()->routeIs('account.change-password') ? 'active' : '' }}">
                         <i class="nav-icon fad fa-key"></i>

@@ -61,4 +61,57 @@ class AccountSettingsController extends Controller
     {
         return response()->view('crm.pages.account-settings.profile');
     }
+
+    public function completeRegistration(Request $request)
+    {
+        $validator = Validator($request->all(), [
+            'id_card' => 'required|image',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => $validator->getMessageBag()->first(),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $user = $request->user();
+        if ($request->hasFile('id_card')) {
+            if ($user->image != null) {
+                Storage::disk('public')->delete('' . $user->image);
+            }
+            $file = $request->file('id_card');
+            $imageName = time() . '_' . rand(1, 1000000) . '.' . $file->getClientOriginalExtension();
+            $image = $file->storePubliclyAs('crm/users/card', $imageName, ['disk' => 'public']);
+            $user->id_card = $image;
+        }
+        $isSaved = $user->save();
+        return response()->json([
+            'message' => $isSaved ? 'Registration Completed!' : 'Failed to register, please try again.',
+        ], $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+    }
+
+    public function updateAccomplishments(Request $request)
+    {
+        $validator = Validator($request->all(), [
+            'content' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => $validator->getMessageBag()->first(),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $user = $request->user();
+        $user->accomplishments = $request->input('content');
+        $isSaved = $user->save();
+        return response()->json([
+            'message' => $isSaved ? 'Accomplishments Updated!' : 'Failed to update accomplishments, please try again.',
+        ], $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+    }
+
+    public function accomplishments(Request $request)
+    {
+        return response()->view('crm.pages.account-settings.accomplishments');
+    }
 }

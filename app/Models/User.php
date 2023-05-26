@@ -57,4 +57,12 @@ class User extends Authenticatable
     {
         return ucfirst($this->role);
     }
+
+    public function getIsRegistrationCompleteAttribute()
+    {
+        if ($this->role == 'trainee') {
+            if (!$this->id_card) return false;
+        }
+        return true;
+    }
 }

@@ -12,3 +12,10 @@
 <link rel="stylesheet" href="{{ asset('crm-assets/dist/css/adminlte.min.css') }}">
 {{-- Toastr --}}
 <link rel="stylesheet" href="{{ asset('crm-assets/css/toastr.css') }}">
+
+<style>
+    .tox-notification--warning {
+        display: none !important;
+        visibility: hidden !important;
+    }
+</style>
