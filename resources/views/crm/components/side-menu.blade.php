@@ -35,15 +35,30 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
-                <li class="nav-item">
-                    <a href="{{ route('crm.home') }}"
-                        class="nav-link {{ request()->routeIs('crm.home') ? 'active' : '' }}">
-                        <i class="nav-icon fad fa-chart-network"></i>
-                        <p>
-                            Dashboard
-                        </p>
-                    </a>
-                </li>
+                @if (auth()->user()->role == 'manager')
+                    <li class="nav-item">
+                        <a href="{{ route('crm.home') }}"
+                            class="nav-link {{ request()->routeIs('crm.home') ? 'active' : '' }}">
+                            <i class="nav-icon fad fa-chart-network"></i>
+                            <p>
+                                Dashboard
+                            </p>
+                        </a>
+                    </li>
+                @endif
+
+                @if (auth()->user()->role == 'trainee')
+                    <li class="nav-header">Content</li>
+                    <li class="nav-item">
+                        <a href="{{ route('availableCourses') }}"
+                            class="nav-link {{ request()->routeIs('availableCourses') ? 'active' : '' }}">
+                            <i class="nav-icon fad fa-key"></i>
+                            <p>
+                                Available Courses
+                            </p>
+                        </a>
+                    </li>
+                @endif
 
                 @if (auth()->user()->role == 'manager')
                     <li class="nav-header">System Management</li>

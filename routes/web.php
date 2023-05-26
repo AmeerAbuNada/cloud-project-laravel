@@ -9,6 +9,7 @@ use App\Http\Controllers\ClientRelationsController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\MainController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProjectController;
@@ -61,6 +62,14 @@ Route::middleware('completeRegistration')->group(function () {
 
             Route::resource('managers', ManagerController::class);
             Route::resource('courses', CourseController::class);
+        });
+
+
+        Route::middleware('role:trainee')->group(function () {
+            Route::get('/available-courses', [MainController::class, 'availableCourses'])->name('availableCourses');
+            Route::get('/available-courses/{course}', [MainController::class, 'showCourse'])->name('showCourse');
+            Route::post('/available-courses/{course}/apply', [MainController::class, 'applyForCourse']);
+            Route::post('/available-courses/{course}/remove', [MainController::class, 'removeCourse']);
         });
     });
 
