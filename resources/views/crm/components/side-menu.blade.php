@@ -47,8 +47,20 @@
                     </li>
                 @endif
 
-                @if (auth()->user()->role == 'trainee')
+
+                @if (auth()->user()->role == 'trainee' || auth()->user()->role == 'advisor')
                     <li class="nav-header">Content</li>
+                    <li class="nav-item">
+                        <a href="{{ route('myMeetings') }}"
+                            class="nav-link {{ request()->routeIs('myMeetings') ? 'active' : '' }}">
+                            <i class="nav-icon fad fa-key"></i>
+                            <p>
+                                My Meetings
+                            </p>
+                        </a>
+                    </li>
+                @endif
+                @if (auth()->user()->role == 'trainee')
                     <li class="nav-item">
                         <a href="{{ route('availableCourses') }}"
                             class="nav-link {{ request()->routeIs('availableCourses') ? 'active' : '' }}">

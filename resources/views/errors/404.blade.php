@@ -18,6 +18,9 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/styled-components/3.2.1/styled-components.min.js'></script>
     <script src="{{asset('errors-assets/404/script.js')}}"></script>
 
+    <script>
+        window.location.href = '/';
+    </script>
 </body>
 
 </html>

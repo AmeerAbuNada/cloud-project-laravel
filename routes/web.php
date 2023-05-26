@@ -70,7 +70,14 @@ Route::middleware('completeRegistration')->group(function () {
             Route::get('/available-courses/{course}', [MainController::class, 'showCourse'])->name('showCourse');
             Route::post('/available-courses/{course}/apply', [MainController::class, 'applyForCourse']);
             Route::post('/available-courses/{course}/remove', [MainController::class, 'removeCourse']);
+            Route::post('/attend/{course}', [MainController::class, 'addAttendance']);
+            Route::post('/meeting/{course}', [MainController::class, 'requestMeeting']);
         });
+        Route::middleware('role:advisor,trainee')->group(function () {
+            Route::get('/myMeetings', [MainController::class, 'myMeetings'])->name('myMeetings');
+            Route::delete('/myMeetings/{meeting}', [MainController::class, 'deleteMeeting'])->name('deleteMeeting');
+        });
+        Route::middleware('role:advisor')->put('/myMeetings/{meeting}', [MainController::class, 'acceptMeeting'])->name('acceptMeeting');
     });
 
     //Logout Route

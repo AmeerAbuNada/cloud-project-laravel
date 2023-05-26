@@ -209,7 +209,7 @@ const FourOhFour = () => {
   return /*#__PURE__*/(
     React.createElement(AppShell, null, /*#__PURE__*/
     React.createElement(Container, null, /*#__PURE__*/
-    React.createElement(Message, { className: "return-link", href: "/crm", rel: "noreferrer noopener" }, "Return to happiness"), /*#__PURE__*/
+    React.createElement(Message, { className: "return-link", href: "/", rel: "noreferrer noopener" }, "Return to happiness"), /*#__PURE__*/
 
 
     React.createElement(Logo, { className: "bear-logo--tears" }), /*#__PURE__*/

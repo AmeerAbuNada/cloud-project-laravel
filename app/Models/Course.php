@@ -33,4 +33,9 @@ class Course extends Model
     {
         return $this->belongsToMany(User::class);
     }
+
+    public function attendances()
+    {
+        return $this->belongsToMany(User::class, 'attendance')->withPivot('date');
+    }
 }

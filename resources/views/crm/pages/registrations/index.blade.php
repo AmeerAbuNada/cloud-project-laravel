@@ -94,7 +94,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="9" style="text-align: center">No Managers To Be Displayed</td>
+                                            <td colspan="9" style="text-align: center">No Registrations To Be Displayed</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

@@ -77,4 +77,14 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Course::class);
     }
+
+    public function attendances()
+    {
+        return $this->belongsToMany(Course::class, 'attendance')->withPivot('date');
+    }
+
+    public function meetings()
+    {
+        return $this->hasMany(Meeting::class, $this->role . '_id', 'id');
+    }
 }
