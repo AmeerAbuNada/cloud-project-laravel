@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ClientRelationsController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ManagerController;
@@ -59,6 +60,7 @@ Route::middleware('completeRegistration')->group(function () {
             Route::get('/users/{user}', [RegistrationController::class, 'user'])->name('users.show');
 
             Route::resource('managers', ManagerController::class);
+            Route::resource('courses', CourseController::class);
         });
     });
 

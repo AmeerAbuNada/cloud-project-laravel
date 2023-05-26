@@ -65,6 +65,15 @@
                             </p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('courses.index') }}"
+                            class="nav-link {{ request()->routeIs('courses.index') ? 'active' : '' }}">
+                            <i class="nav-icon fad fa-key"></i>
+                            <p>
+                                Courses
+                            </p>
+                        </a>
+                    </li>
                 @endif
 
                 <li class="nav-header">Account Management</li>
