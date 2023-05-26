@@ -45,6 +45,28 @@
                     </a>
                 </li>
 
+                @if (auth()->user()->role == 'manager')
+                    <li class="nav-header">System Management</li>
+                    <li class="nav-item">
+                        <a href="{{ route('managers.index') }}"
+                            class="nav-link {{ request()->routeIs('managers.index') ? 'active' : '' }}">
+                            <i class="nav-icon fad fa-key"></i>
+                            <p>
+                                Managers
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('registrations.index') }}"
+                            class="nav-link {{ request()->routeIs('registrations.index') ? 'active' : '' }}">
+                            <i class="nav-icon fad fa-key"></i>
+                            <p>
+                                Trainee Registrations
+                            </p>
+                        </a>
+                    </li>
+                @endif
+
                 <li class="nav-header">Account Management</li>
                 <li class="nav-item">
                     <a href="{{ route('account.profile') }}"
@@ -55,15 +77,17 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('account.accomplishments') }}"
-                        class="nav-link {{ request()->routeIs('account.accomplishments') ? 'active' : '' }}">
-                        <i class="nav-icon fad fa-key"></i>
-                        <p>
-                            Accomplishments
-                        </p>
-                    </a>
-                </li>
+                @if (auth()->user()->role == 'trainee')
+                    <li class="nav-item">
+                        <a href="{{ route('account.accomplishments') }}"
+                            class="nav-link {{ request()->routeIs('account.accomplishments') ? 'active' : '' }}">
+                            <i class="nav-icon fad fa-key"></i>
+                            <p>
+                                Accomplishments
+                            </p>
+                        </a>
+                    </li>
+                @endif
                 <li class="nav-item">
                     <a href="{{ route('account.change-password') }}"
                         class="nav-link {{ request()->routeIs('account.change-password') ? 'active' : '' }}">

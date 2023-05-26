@@ -21,7 +21,7 @@
             <div class="card-body">
                 <form onsubmit="event.preventDefault(); performLogin();">
                     <div class="input-group mb-3">
-                        <input type="email" class="form-control" id="email" placeholder="Email">
+                        <input type="text" class="form-control" id="email" placeholder="Email Or ID">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>

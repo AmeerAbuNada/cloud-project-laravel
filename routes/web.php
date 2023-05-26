@@ -8,8 +8,10 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ClientRelationsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\User\FileController as UserFileController;
 use App\Http\Controllers\User\ProjectController as UserProjectController;
@@ -34,6 +36,9 @@ Route::middleware('completeRegistration')->group(function () {
 
     //Authenticated Routes
     Route::middleware('auth')->group(function () {
+
+        Route::withoutMiddleware('completeRegistration')->get('/under-review', [RegistrationController::class, 'underReview']);
+
         //Account Settings
         Route::view('/', 'crm.parent')->name('crm.home');
         Route::prefix('/account-settings')->controller(AccountSettingsController::class)->group(function () {
@@ -46,6 +51,15 @@ Route::middleware('completeRegistration')->group(function () {
             ');
             Route::get('/accomplishments', 'accomplishments')->name('account.accomplishments');
             Route::put('/accomplishments', 'updateAccomplishments')->name('account.update-accomplishments');
+        });
+
+        Route::middleware('role:manager')->group(function () {
+            Route::get('/registrations', [RegistrationController::class, 'index'])->name('registrations.index');
+            Route::post('/registrations/{user}/accept', [RegistrationController::class, 'accept'])->name('registrations.accept');
+            Route::post('/registrations/{user}/deny', [RegistrationController::class, 'deny'])->name('registrations.deny');
+            Route::get('/users/{user}', [RegistrationController::class, 'user'])->name('users.show');
+
+            Route::resource('managers', ManagerController::class);
         });
     });
 

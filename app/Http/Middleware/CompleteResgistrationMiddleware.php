@@ -22,6 +22,9 @@ class CompleteResgistrationMiddleware
             if (auth()->user()->role == 'trainee' && !auth()->user()->id_card) {
                 return redirect('/account-settings/profile');
             }
+            if (auth()->user()->role == 'trainee' && !auth()->user()->verified_at) {
+                return redirect('/under-review');
+            }
         }
         return $next($request);
     }

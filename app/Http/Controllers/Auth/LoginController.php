@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -19,16 +20,24 @@ class LoginController extends Controller
 
     public function login(LoginRequest $request)
     {
-        $loginInfo = ["email" => $request->input('email'), "password" => $request->input('password')];
-        if (Auth::attempt($loginInfo, $request->input('remember'))) {
+        $user = User::where('id', $request->input('email'))->orWhere('email', $request->input('email'))->first();
+        if (!$user) {
             return response()->json([
-                'message' => 'Logged in Successfully!',
-            ], Response::HTTP_OK);
-        } else {
-            return response()->json([
-                'message' => 'Wrong email or password.',
+                'message' => 'Wrong login info.',
             ], Response::HTTP_BAD_REQUEST);
         }
+
+        if (!Hash::check($request->input('password'), $user->password)) {
+            return response()->json([
+                'message' => 'Wrong login info.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        Auth::login($user, $request->input('remember'));
+        return response()->json([
+            'message' => 'Logged in Successfully!',
+        ], Response::HTTP_OK);
+
     }
 
     public function showRegister()
@@ -39,7 +48,7 @@ class LoginController extends Controller
     public function register(RegisterRequest $request)
     {
         $user = User::create($request->validated());
-        if($user) {
+        if ($user) {
             Auth::login($user);
         }
         return response()->json([

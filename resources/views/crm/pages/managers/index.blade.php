@@ -1,6 +1,6 @@
 @extends('crm.parent')
 
-@section('title', 'Deleted Projects')
+@section('title', 'Managers')
 
 @section('styles')
 @endsection
@@ -12,23 +12,30 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Deleted Projects</h3>
+                            <h3 class="card-title">Managers</h3>
                             <div class="card-tools">
                                 <form method="GET" class="input-group input-group-sm" style="width: 270px;">
                                     <input type="text" name="search" class="form-control float-right"
-                                        placeholder="Search by title or status" value="{{ request()->search }}">
+                                        placeholder="Search by name or vat number" value="{{ request()->search }}">
 
                                     <div class="input-group-append">
                                         <button type="submit" class="btn btn-default">
                                             <i class="fas fa-search"></i>
                                         </button>
                                         @if (isset(request()->search))
-                                            <a href="{{ route('projects.deleted') }}" class="btn btn-primary">
+                                            <a href="{{ route('managers.index') }}" class="btn btn-primary">
                                                 All
                                             </a>
                                         @endif
                                     </div>
                                 </form>
+                            </div>
+                            <div class="card-tools" style="float: left; margin-left: 30px">
+                                <div class="input-group-append">
+                                    <a href="{{ route('managers.create') }}" class="btn btn-success">
+                                        Create New Manager
+                                    </a>
+                                </div>
                             </div>
                         </div>
                         <!-- /.card-header -->
@@ -37,18 +44,17 @@
                                 <thead>
                                     <tr>
                                         <th style="width: 10px">#</th>
-                                        <th>Title</th>
-                                        <th>Deadline</th>
-                                        <th>Assigned User</th>
-                                        <th>Assigned Client</th>
-                                        <th>Status</th>
-                                        <th>Deleted By</th>
-                                        <th>Deleted At</th>
+                                        <th>Imaga</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone Numebr</th>
+                                        <th>Address</th>
+                                        <th>Created At</th>
                                         <th style="width: 40px">Manage</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($projects as $project)
+                                    @forelse ($users as $user)
                                         <tr>
                                             @if (isset(request()->page))
                                                 <td>
@@ -60,52 +66,36 @@
                                                 </td>
                                             @endif
                                             <td>
-                                                <a href="{{ route('projects.show', $project) }}">
-                                                    {{ $project->title }}
-                                                </a>
-                                            </td>
-                                            <td>{{ $project->deadline }}</td>
-                                            <td>
-                                                @if (auth()->user()->id == $project->user->id)
-                                                    <a href="{{ route('account.profile') }}">
-                                                    @else
-                                                        <a href="{{ route('users.show', $project->user) }}">
-                                                @endif
-                                                {{ $project->user->name }}</a>
+                                                <img src="{{ $user->image_url }}" width="100px" alt="">
                                             </td>
                                             <td>
-                                                <a
-                                                    href="{{ route('clients.show', $project->client) }}">{{ $project->client->name }}</a>
-                                            </td>
-                                            <td>{!! $project->status_value !!}</td>
-                                            <td>
-                                                @if (auth()->user()->id == $project->deletedBy->id)
-                                                    <a href="{{ route('account.profile') }}">
-                                                    @else
-                                                        <a href="{{ route('users.show', $project->deletedBy) }}">
-                                                @endif
-                                                {{ $project->deletedBy->name }}
-                                                </a>
+                                                {{ $user->name }}
                                             </td>
                                             <td>
-                                                {{ $project->deleted_at->format('Y M d | H:i') }}
+                                                {{ $user->email }}
+                                            </td>
+                                            <td>
+                                                {{ $user->phone_number }}
+                                            </td>
+                                            <td>
+                                                {{ $user->address }}
+                                            </td>
+                                            <td>
+                                                {{ $user->created_at->format('Y M d | H:i') }}
                                             </td>
                                             <td>
                                                 <div class="btn-group">
-                                                    <a href="{{ route('projects.edit', $project) }}" class="btn btn-info">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
                                                     <button type="button"
-                                                        onclick="restoreProject({{ $project->id }}, this)"
-                                                        class="btn btn-warning">
-                                                        <i class="fas fa-recycle"></i>
+                                                        onclick="confirmDelete('{{ route('managers.destroy', $user) }}', this)"
+                                                        class="btn btn-danger">
+                                                        <i class="fas fa-trash"></i>
                                                     </button>
                                                 </div>
                                             </td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="9" style="text-align: center">No Deleted Projects</td>
+                                            <td colspan="9" style="text-align: center">No Managers To Be Displayed</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -114,7 +104,7 @@
                         <!-- /.card-body -->
                         <div class="card-header">
                             <div class="card-tools">
-                                {!! $projects->links() !!}
+                                {!! $users->links() !!}
                             </div>
                         </div>
                     </div>
@@ -128,16 +118,4 @@
 @endsection
 
 @section('scripts')
-    <script>
-        function restoreProject(id, reference) {
-            let url = `/crm/projects/${id}/restore`;
-            axios.put(url)
-                .then((response) => {
-                    toastr.success(response.data.message);
-                    reference.closest('tr').remove();
-                }).catch((error) => {
-                    toastr.error(error.reponse.data.message);
-                });
-        }
-    </script>
 @endsection

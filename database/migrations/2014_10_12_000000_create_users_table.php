@@ -21,10 +21,9 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('phone_number')->nullable();
             $table->string('address')->nullable();
-
             $table->string('id_card')->nullable();
-
             $table->longText('accomplishments')->nullable();
+            $table->timestamp('verified_at')->nullable();
 
             $table->rememberToken();
             $table->timestamps();
