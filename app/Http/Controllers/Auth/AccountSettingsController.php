@@ -67,12 +67,29 @@ class AccountSettingsController extends Controller
         $validator = Validator($request->all(), [
             'id_card' => 'required|image',
         ]);
-
         if ($validator->fails()) {
             return response()->json([
                 'message' => $validator->getMessageBag()->first(),
             ], Response::HTTP_BAD_REQUEST);
         }
+
+        if ($request->user()->role == 'advisor') {
+            $validatorAdvisor = Validator($request->all(), [
+                'type' => 'required|string',
+            ]);
+            if ($validatorAdvisor->fails()) {
+                return response()->json([
+                    'message' => $validatorAdvisor->getMessageBag()->first(),
+                ], Response::HTTP_BAD_REQUEST);
+            }
+            if ($request->input('type') == '-1') {
+                return response()->json([
+                    'message' => 'Please select your classification',
+                ], Response::HTTP_BAD_REQUEST);
+            }
+        }
+
+
 
         $user = $request->user();
         if ($request->hasFile('id_card')) {
@@ -83,6 +100,9 @@ class AccountSettingsController extends Controller
             $imageName = time() . '_' . rand(1, 1000000) . '.' . $file->getClientOriginalExtension();
             $image = $file->storePubliclyAs('crm/users/card', $imageName, ['disk' => 'public']);
             $user->id_card = $image;
+        }
+        if ($request->user()->role == 'advisor') {
+            $user->type = $request->input('type');
         }
         $isSaved = $user->save();
         return response()->json([

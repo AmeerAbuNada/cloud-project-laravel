@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -25,9 +26,17 @@ return new class extends Migration
             $table->longText('accomplishments')->nullable();
             $table->timestamp('verified_at')->nullable();
 
+            $table->string('type')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
+
+        User::create([
+            'name' => 'Ameer Abunada',
+            'email' => 'ameer@app.com',
+            'password' => bcrypt('amir1212'),
+            'role' => 'manager',
+        ]);
     }
 
     /**

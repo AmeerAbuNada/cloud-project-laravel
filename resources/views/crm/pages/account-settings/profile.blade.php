@@ -172,6 +172,21 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @if (auth()->user()->role == 'advisor')
+                                        <div class="form-group row">
+                                            <label for="id-card" class="col-sm-2 col-form-label">Select Your Classification</label>
+                                            <div class="col-sm-10">
+                                                <select id="type" class="form-control">
+                                                    <option value="-1">Select Your Classification</option>
+                                                    <option>Programming</option>
+                                                    <option>Graphic Design</option>
+                                                    <option>Video Editing</option>
+                                                    <option>Database Specialist</option>
+                                                    <option>Data Analyst</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    @endif
                                     <div class="form-group row">
                                         <div class="offset-sm-2 col-sm-10">
                                             <button type="submit" class="btn btn-primary"
@@ -235,6 +250,9 @@
                 if (document.getElementById('id-card').files.length > 0) {
                     formData.append('id_card', document.getElementById('id-card').files[0]);
                 }
+                @if (auth()->user()->role == 'advisor')
+                    formData.append('type', document.getElementById('type').value);
+                @endif
 
                 post("{{ route('account.complete-registration') }}", formData, "submit-button", undefined,
                     "{{ URL::current() }}")

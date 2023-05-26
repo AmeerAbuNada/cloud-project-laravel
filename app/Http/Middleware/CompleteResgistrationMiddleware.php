@@ -19,7 +19,7 @@ class CompleteResgistrationMiddleware
     {
         if (Route::currentRouteName() == 'account.profile') return $next($request);
         if (Auth::check()) {
-            if (auth()->user()->role == 'trainee' && !auth()->user()->id_card) {
+            if (in_array(auth()->user()->role, ['trainee', 'advisor']) && !auth()->user()->id_card) {
                 return redirect('/account-settings/profile');
             }
             if (auth()->user()->role == 'trainee' && !auth()->user()->verified_at) {

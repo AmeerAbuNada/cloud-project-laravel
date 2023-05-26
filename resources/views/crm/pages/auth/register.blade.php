@@ -22,11 +22,6 @@
                 <form onsubmit="event.preventDefault(); performRegister();">
                     <div class="input-group mb-3">
                         <input type="name" class="form-control" id="name" placeholder="Full Name">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-envelope"></span>
-                            </div>
-                        </div>
                     </div>
                     <div class="input-group mb-3">
                         <input type="email" class="form-control" id="email" placeholder="Email">
@@ -45,12 +40,19 @@
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" id="password_confirmation" placeholder="Password Confirmation">
+                        <input type="password" class="form-control" id="password_confirmation"
+                            placeholder="Password Confirmation">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
                             </div>
                         </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <select name="role" id="role" class="form-control">
+                            <option value="trainee">Trainee</option>
+                            <option value="advisor">Advisor</option>
+                        </select>
                     </div>
                     <div class="row">
                         <!-- /.col -->
@@ -82,6 +84,7 @@
                 email: document.getElementById('email').value,
                 password: document.getElementById('password').value,
                 password_confirmation: document.getElementById('password_confirmation').value,
+                role: document.getElementById('role').value,
             }
 
             post("{{ route('register.post') }}", data, "login-button", undefined, "{{ url()->previous() }}");

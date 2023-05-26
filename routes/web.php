@@ -47,8 +47,7 @@ Route::middleware('completeRegistration')->group(function () {
             Route::get('/info', 'showGeneralInfo')->name('account.general-info');
             Route::put('/info', 'updateGeneralInfo')->name('account.update-general-info');
             Route::get('/change-password', 'showChangePassword')->name('account.change-password');
-            Route::put('/change-password', 'changePassword')->name('account.update-change-password
-            ');
+            Route::put('/change-password', 'changePassword')->name('account.update-change-password');
             Route::get('/accomplishments', 'accomplishments')->name('account.accomplishments');
             Route::put('/accomplishments', 'updateAccomplishments')->name('account.update-accomplishments');
         });

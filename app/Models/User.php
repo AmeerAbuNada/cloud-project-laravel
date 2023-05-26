@@ -62,7 +62,7 @@ class User extends Authenticatable
 
     public function getIsRegistrationCompleteAttribute()
     {
-        if ($this->role == 'trainee') {
+        if ($this->role == 'trainee' || $this->role == 'advisor') {
             if (!$this->id_card) return false;
         }
         return true;
