@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreMeetingRequest;
+use App\Mail\NewMessageEmail;
 use App\Models\Course;
 use App\Models\Meeting;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
 
 class MainController extends Controller
@@ -119,6 +122,33 @@ class MainController extends Controller
         $meeting->save();
         return response()->json([
             'message' => 'Meeting has been accepted successfully!',
+        ], Response::HTTP_OK);
+    }
+
+    public function myCourses(Request $request)
+    {
+        $user = $request->user();
+        if ($user->role == 'advisor') {
+            $courses = $user->courses()->orderBy('created_at', 'DESC')->paginate(10);
+        } else {
+            $courses = $user->appliedCourses()->orderBy('created_at', 'DESC')->paginate(10);
+        }
+        return response()->view('crm.pages.myCourses.index', compact('courses'));
+    }
+
+    public function sendEmail(User $user, Request $request)
+    {
+        $validator = Validator($request->all(), [
+            'message' => 'required|string',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => $validator->getMessageBag()->first()
+            ], Response::HTTP_BAD_REQUEST);
+        }
+        Mail::to($user)->send(new NewMessageEmail($request->input('message')));
+        return response()->json([
+            'message' => 'Email has been sent successfully!'
         ], Response::HTTP_OK);
     }
 }

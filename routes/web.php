@@ -67,17 +67,21 @@ Route::middleware('completeRegistration')->group(function () {
 
         Route::middleware('role:trainee')->group(function () {
             Route::get('/available-courses', [MainController::class, 'availableCourses'])->name('availableCourses');
-            Route::get('/available-courses/{course}', [MainController::class, 'showCourse'])->name('showCourse');
             Route::post('/available-courses/{course}/apply', [MainController::class, 'applyForCourse']);
             Route::post('/available-courses/{course}/remove', [MainController::class, 'removeCourse']);
             Route::post('/attend/{course}', [MainController::class, 'addAttendance']);
             Route::post('/meeting/{course}', [MainController::class, 'requestMeeting']);
         });
         Route::middleware('role:advisor,trainee')->group(function () {
+            Route::get('/available-courses/{course}', [MainController::class, 'showCourse'])->name('showCourse');
             Route::get('/myMeetings', [MainController::class, 'myMeetings'])->name('myMeetings');
+            Route::get('/myCourses', [MainController::class, 'myCourses'])->name('myCourses');
             Route::delete('/myMeetings/{meeting}', [MainController::class, 'deleteMeeting'])->name('deleteMeeting');
         });
-        Route::middleware('role:advisor')->put('/myMeetings/{meeting}', [MainController::class, 'acceptMeeting'])->name('acceptMeeting');
+        Route::middleware('role:advisor')->group(function () {
+            Route::put('/myMeetings/{meeting}', [MainController::class, 'acceptMeeting'])->name('acceptMeeting');
+            Route::post('/sendEmail/{user}', [MainController::class, 'sendEmail']);
+        });
     });
 
     //Logout Route

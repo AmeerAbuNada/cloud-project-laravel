@@ -125,6 +125,15 @@
                                                     <td>
                                                         {{ $user->email }}
                                                     </td>
+                                                    <td>
+                                                        <div class="btn-group">
+                                                            <button type="button"
+                                                                onclick="openSendMail({{ $user->id }})"
+                                                                class="btn btn-warning">
+                                                                <i class="fas fa-paper-plane"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             @empty
                                                 <tr>
@@ -178,6 +187,35 @@
             </div>
             <!-- /.modal-dialog -->
         </div>
+
+        <div class="modal fade" id="sendMailModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Send Email</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" onsubmit="event.preventDefault(); editProfile();">
+                            <div class="form-group row">
+                                <label for="name" class="col-sm-2 col-form-label">Subject</label>
+                                <div class="col-sm-10">
+                                    <textarea name="message" id="message" rows="6" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="sendEmail(this)">Send</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
     </section>
 @endsection
 
@@ -185,6 +223,11 @@
     <script>
         var modal = document.getElementById('modal-default');
         var modalInstance = new bootstrap.Modal(modal);
+
+
+
+        var sendMailModal = document.getElementById('sendMailModal');
+        var modalInstance2 = new bootstrap.Modal(sendMailModal);
 
         function attend(ref) {
             ref.disabled = true;
@@ -225,6 +268,36 @@
 
         function closeModal() {
             modalInstance.hide();
+        }
+
+        let emailId = 0;
+
+        function openSendMail(id) {
+            emailId = id;
+            modalInstance2.show();
+        }
+
+        function closeSendMail() {
+            modalInstance2.hide();
+            emailId = 0;
+        }
+
+        function sendEmail(ref) {
+            ref.disabled = true;
+            let data = {
+                message: document.getElementById('message').value
+            }
+            axios.post(`/sendEmail/${emailId}`, data)
+                .then((response) => {
+                    toastr.success(response.data.message);
+                    closeSendMail();
+                })
+                .catch((error) => {
+                    toastr.error(error.response.data.message)
+                })
+                .finally(() => {
+                    ref.disabled = false;
+                })
         }
     </script>
 @endsection

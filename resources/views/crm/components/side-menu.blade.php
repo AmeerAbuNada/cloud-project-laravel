@@ -59,6 +59,15 @@
                             </p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('myCourses') }}"
+                            class="nav-link {{ request()->routeIs('myCourses') ? 'active' : '' }}">
+                            <i class="nav-icon fad fa-key"></i>
+                            <p>
+                                My Courses
+                            </p>
+                        </a>
+                    </li>
                 @endif
                 @if (auth()->user()->role == 'trainee')
                     <li class="nav-item">
