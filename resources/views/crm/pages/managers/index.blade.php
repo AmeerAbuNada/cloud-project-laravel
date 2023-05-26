@@ -30,13 +30,15 @@
                                     </div>
                                 </form>
                             </div>
-                            <div class="card-tools" style="float: left; margin-left: 30px">
-                                <div class="input-group-append">
-                                    <a href="{{ route('managers.create') }}" class="btn btn-success">
-                                        Create New Manager
-                                    </a>
+                            @if (Route::currentRouteName() == 'managers.index')
+                                <div class="card-tools" style="float: left; margin-left: 30px">
+                                    <div class="input-group-append">
+                                        <a href="{{ route('managers.create') }}" class="btn btn-success">
+                                            Create New Manager
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body p-0">
@@ -69,7 +71,13 @@
                                                 <img src="{{ $user->image_url }}" width="100px" alt="">
                                             </td>
                                             <td>
-                                                {{ $user->name }}
+                                                @if (auth()->user()->role == 'manager')
+                                                    <a href="{{ route('users.show', $user) }}">
+                                                        {{ $user->name }}
+                                                    </a>
+                                                @else
+                                                    {{ $user->name }}
+                                                @endif
                                             </td>
                                             <td>
                                                 {{ $user->email }}

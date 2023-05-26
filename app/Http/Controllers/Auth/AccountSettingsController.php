@@ -5,11 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\Settings\ChangePasswordRequest;
 use App\Http\Requests\Auth\Settings\GeneralSettingsRequest;
-use App\Models\Client;
-use App\Models\File;
-use App\Models\Project;
-use App\Models\Task;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,6 +13,7 @@ class AccountSettingsController extends Controller
 {
     public function showGeneralInfo()
     {
+        parent::saveLog('Opened Show General Account Info Page', auth()->user()->id);
         return response()->view('crm.pages.account-settings.general-info');
     }
 
@@ -37,6 +33,9 @@ class AccountSettingsController extends Controller
             $user->image = $image;
         }
         $isSaved = $user->save();
+        if ($isSaved) {
+            parent::saveLog('Updated Account Info', auth()->user()->id);
+        }
         return response()->json([
             'message' => $isSaved ? 'Settings Updated Successfully!' : 'Failed to save settings, Please try again.',
         ], $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
@@ -44,6 +43,7 @@ class AccountSettingsController extends Controller
 
     public function showChangePassword()
     {
+        parent::saveLog('Opened Show Password Page', auth()->user()->id);
         return response()->view('crm.pages.account-settings.change-password');
     }
 
@@ -52,6 +52,9 @@ class AccountSettingsController extends Controller
         $user = auth()->user();
         $user->password = bcrypt($request->input('new_password'));
         $isSaved = $user->save();
+        if ($isSaved) {
+            parent::saveLog('Changed Password', auth()->user()->id);
+        }
         return response()->json([
             'message' => $isSaved ? 'Password Changed Successfully!' : 'Failed to change password, Please try again.',
         ], $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
@@ -59,6 +62,7 @@ class AccountSettingsController extends Controller
 
     public function showProfile()
     {
+        parent::saveLog('Opened show profile page', auth()->user()->id);
         return response()->view('crm.pages.account-settings.profile');
     }
 
@@ -105,6 +109,9 @@ class AccountSettingsController extends Controller
             $user->type = $request->input('type');
         }
         $isSaved = $user->save();
+        if ($isSaved) {
+            parent::saveLog('Completed Registration', auth()->user()->id);
+        }
         return response()->json([
             'message' => $isSaved ? 'Registration Completed!' : 'Failed to register, please try again.',
         ], $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
@@ -125,6 +132,9 @@ class AccountSettingsController extends Controller
         $user = $request->user();
         $user->accomplishments = $request->input('content');
         $isSaved = $user->save();
+        if ($isSaved) {
+            parent::saveLog('Updated Accomplishments', auth()->user()->id);
+        }
         return response()->json([
             'message' => $isSaved ? 'Accomplishments Updated!' : 'Failed to update accomplishments, please try again.',
         ], $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
@@ -132,6 +142,7 @@ class AccountSettingsController extends Controller
 
     public function accomplishments(Request $request)
     {
+        parent::saveLog('Opened Accomplishments Page', auth()->user()->id);
         return response()->view('crm.pages.account-settings.accomplishments');
     }
 }

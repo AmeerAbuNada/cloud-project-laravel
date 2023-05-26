@@ -93,6 +93,24 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ route('advisors.index') }}"
+                            class="nav-link {{ request()->routeIs('advisors.index') ? 'active' : '' }}">
+                            <i class="nav-icon fad fa-key"></i>
+                            <p>
+                                Advisors
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('trainees.index') }}"
+                            class="nav-link {{ request()->routeIs('trainees.index') ? 'active' : '' }}">
+                            <i class="nav-icon fad fa-key"></i>
+                            <p>
+                                Trainees
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('registrations.index') }}"
                             class="nav-link {{ request()->routeIs('registrations.index') ? 'active' : '' }}">
                             <i class="nav-icon fad fa-key"></i>

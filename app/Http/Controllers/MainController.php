@@ -30,6 +30,7 @@ class MainController extends Controller
                 }
             }
         }
+        parent::saveLog('opened available courses page', auth()->user()->id);
         return response()->view('crm.pages.available-courses.index', compact('courses'));
     }
 
@@ -43,6 +44,7 @@ class MainController extends Controller
                 break;
             }
         }
+        parent::saveLog('opened course details page', auth()->user()->id);
         return response()->view('crm.pages.available-courses.show-course', compact('course'));
     }
 
@@ -52,6 +54,7 @@ class MainController extends Controller
         if (!$course->users()->where('id', $user->id)->exists()) {
             $user->appliedCourses()->attach($course->id);
         }
+        parent::saveLog('Applied for a course', auth()->user()->id);
         return response()->json([
             'message' => 'Course Assinged Successfully!',
         ], Response::HTTP_CREATED);
@@ -63,6 +66,7 @@ class MainController extends Controller
         if ($course->users()->where('id', $user->id)->exists()) {
             $user->appliedCourses()->detach($course->id);
         }
+        parent::saveLog('removed from a course', auth()->user()->id);
         return response()->json([
             'message' => 'Course Removed Successfully!',
         ], Response::HTTP_OK);
@@ -77,6 +81,8 @@ class MainController extends Controller
             ], Response::HTTP_BAD_REQUEST);
         }
         $user->attendances()->attach($course->id, ['date' => now()]);
+        parent::saveLog('Made attendance', auth()->user()->id);
+
         return response()->json([
             'message' => 'Attendance Registered Successfully!',
         ], Response::HTTP_OK);
@@ -97,6 +103,7 @@ class MainController extends Controller
             }
         }
         Meeting::create($request->getParsedDate());
+        parent::saveLog('Requested a new meeting', auth()->user()->id);
         return response()->json([
             'message' => 'Meeting has been scheduled successfully!',
         ], Response::HTTP_OK);
@@ -104,6 +111,7 @@ class MainController extends Controller
 
     public function myMeetings(Request $request)
     {
+        parent::saveLog('Opened my meetings page', auth()->user()->id);
         $meetings = $request->user()->meetings()->orderBy('time', 'ASC')->paginate(10);
         return response()->view('crm.pages.myMeetings.index', compact('meetings'));
     }
@@ -111,6 +119,7 @@ class MainController extends Controller
     public function deleteMeeting(Meeting $meeting)
     {
         $meeting->delete();
+        parent::saveLog('Deleted a meeting', auth()->user()->id);
         return response()->json([
             'message' => 'Meeting has been deleted successfully!',
         ], Response::HTTP_OK);
@@ -120,6 +129,7 @@ class MainController extends Controller
     {
         $meeting->is_accepted = true;
         $meeting->save();
+        parent::saveLog('Accepted a meeting', auth()->user()->id);
         return response()->json([
             'message' => 'Meeting has been accepted successfully!',
         ], Response::HTTP_OK);
@@ -133,6 +143,8 @@ class MainController extends Controller
         } else {
             $courses = $user->appliedCourses()->orderBy('created_at', 'DESC')->paginate(10);
         }
+        parent::saveLog('Opened my courses page', auth()->user()->id);
+
         return response()->view('crm.pages.myCourses.index', compact('courses'));
     }
 
@@ -147,6 +159,7 @@ class MainController extends Controller
             ], Response::HTTP_BAD_REQUEST);
         }
         Mail::to($user)->send(new NewMessageEmail($request->input('message')));
+        parent::saveLog('Sent a new email', auth()->user()->id);
         return response()->json([
             'message' => 'Email has been sent successfully!'
         ], Response::HTTP_OK);

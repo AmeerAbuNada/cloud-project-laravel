@@ -34,6 +34,7 @@ class LoginController extends Controller
         }
 
         Auth::login($user, $request->input('remember'));
+        parent::saveLog('Logged in', auth()->user()->id);
         return response()->json([
             'message' => 'Logged in Successfully!',
         ], Response::HTTP_OK);
@@ -50,6 +51,7 @@ class LoginController extends Controller
         $user = User::create($request->validated());
         if ($user) {
             Auth::login($user);
+            parent::saveLog('Registed new account', auth()->user()->id);
         }
         return response()->json([
             'message' => $user ? 'Registed Successfully!' : 'failed to register, please try again.',
@@ -58,6 +60,7 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
+        parent::saveLog('Logged out', auth()->user()->id);
         Auth::logout();
         $request->session()->invalidate();
         return redirect()->route('login');

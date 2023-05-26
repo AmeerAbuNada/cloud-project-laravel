@@ -16,6 +16,7 @@ class CourseController extends Controller
      */
     public function index(Request $request)
     {
+        parent::saveLog('Opened all courses page', auth()->user()->id);
         $courses = Course::when($request->search, function ($q) use ($request) {
             return $q->where('title', 'LIKE', "%$request->search%");
         })->with('advisor')->paginate(10);
@@ -27,6 +28,7 @@ class CourseController extends Controller
      */
     public function create()
     {
+        parent::saveLog('Opened create course page', auth()->user()->id);
         $advisors = User::where('role', 'advisor')->where('id_card', '!=', null)->get();
         return response()->view('crm.pages.courses.create', compact('advisors'));
     }
@@ -37,6 +39,9 @@ class CourseController extends Controller
     public function store(StoreCourseRequest $request)
     {
         $course = Course::create($request->getParsedData());
+        if ($course) {
+            parent::saveLog('Create a new course', auth()->user()->id);
+        }
         return response()->json([
             'message' => $course ? 'Course Created Successfully!' : 'Failed to create, try again.',
         ], $course ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
@@ -47,6 +52,7 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
+        parent::saveLog('opened course page', auth()->user()->id);
         return response()->view('crm.pages.courses.show', compact('course'));
     }
 
@@ -55,6 +61,7 @@ class CourseController extends Controller
      */
     public function edit(Course $course)
     {
+        parent::saveLog('opened edit course page', auth()->user()->id);
         $advisors = User::where('role', 'advisor')->where('id_card', '!=', null)->get();
         return response()->view('crm.pages.courses.edit', compact('advisors', 'course'));
     }
@@ -65,6 +72,9 @@ class CourseController extends Controller
     public function update(UpdateCourseRequest $request, Course $course)
     {
         $updated = $course->update($request->getParsedData());
+        if($updated) {
+            parent::saveLog('Update a course', auth()->user()->id);
+        }
         return response()->json([
             'message' => $updated ? 'Course Update Successfully!' : 'Failed to update, try again.',
         ], $updated ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
@@ -76,6 +86,9 @@ class CourseController extends Controller
     public function destroy(Course $course)
     {
         $deleted = $course->delete();
+        if($deleted) {
+            parent::saveLog('Deleted a course', auth()->user()->id);
+        }
         return response()->json([
             'title' => $deleted ? 'Deleted!' : 'Failed',
             'text' =>  $deleted ? 'Course Has been deleted successfully!' : 'failed to delete, try again.',

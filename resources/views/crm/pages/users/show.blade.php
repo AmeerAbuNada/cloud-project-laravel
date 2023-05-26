@@ -99,6 +99,60 @@
 
                 </div>
             @endif
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                Logs and Activites
+                            </h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 10px">#</th>
+                                        <th>Activity</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($logs as $log)
+                                        <tr>
+                                            @if (isset(request()->page))
+                                                <td>
+                                                    {{ (request()->page - 1) * 25 + $loop->iteration }}
+                                                </td>
+                                            @else
+                                                <td>
+                                                    {{ $loop->iteration }}
+                                                </td>
+                                            @endif
+                                            <td>
+                                                {{ $log->content }}
+                                            </td>
+                                            <td>
+                                                {{ $log->created_at->format('Y M d | H:i') }}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="9" style="text-align: center">No Logs To Be Displayed</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                                <tfoot>
+                                    {{$logs->links()}}
+                                </tfoot>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+
+            </div>
         </div>
     </section>
 @endsection

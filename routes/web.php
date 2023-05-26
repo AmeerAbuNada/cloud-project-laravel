@@ -1,25 +1,12 @@
 <?php
 
 use App\Http\Controllers\Auth\AccountSettingsController;
-use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
-use App\Http\Controllers\ClientController;
-use App\Http\Controllers\ClientRelationsController;
 use App\Http\Controllers\CourseController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\FileController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\ManagerController;
-use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RegistrationController;
-use App\Http\Controllers\TaskController;
-use App\Http\Controllers\User\FileController as UserFileController;
-use App\Http\Controllers\User\ProjectController as UserProjectController;
-use App\Http\Controllers\User\TaskController as UserTaskController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\UserRelationsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -59,6 +46,9 @@ Route::middleware('completeRegistration')->group(function () {
             Route::post('/registrations/{user}/accept', [RegistrationController::class, 'accept'])->name('registrations.accept');
             Route::post('/registrations/{user}/deny', [RegistrationController::class, 'deny'])->name('registrations.deny');
             Route::get('/users/{user}', [RegistrationController::class, 'user'])->name('users.show');
+
+            Route::get('/trainees', [ManagerController::class, 'trainees'])->name('trainees.index');
+            Route::get('/advisors', [ManagerController::class, 'advisors'])->name('advisors.index');
 
             Route::resource('managers', ManagerController::class);
             Route::resource('courses', CourseController::class);

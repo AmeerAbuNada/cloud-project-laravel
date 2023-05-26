@@ -53,6 +53,9 @@
                     </div>
                 </form>
                 <p class="mb-1">
+                    Forgot your password? <a href="{{ route('password.request') }}">Reset it now</a>
+                </p>
+                <p class="mb-1">
                     Don't have and account? <a href="{{ route('register') }}">Register Now!</a>
                 </p>
             </div>

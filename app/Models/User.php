@@ -87,4 +87,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Meeting::class, $this->role . '_id', 'id');
     }
+
+    public function logs() {
+        return $this->hasMany(Log::class);
+    }
 }
