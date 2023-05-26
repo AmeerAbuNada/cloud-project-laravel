@@ -75,10 +75,10 @@
                                                 {{ $user->email }}
                                             </td>
                                             <td>
-                                                {{ $user->phone_number }}
+                                                {{ $user->phone_number ?? 'N/A' }}
                                             </td>
                                             <td>
-                                                {{ $user->address }}
+                                                {{ $user->address ?? 'N/A' }}
                                             </td>
                                             <td>
                                                 {{ $user->created_at->format('Y M d | H:i') }}
