@@ -75,7 +75,10 @@ class MainController extends Controller
     public function addAttendance(Course $course, Request $request)
     {
         $user = $request->user();
-        if (DB::table('attendance')->where('user_id', $user->id)->where('course_id', $course->id)->where('date', now()->format('Y-m-d'))->exists()) {
+        if (DB::table('attendance')->where('user_id', $user->id)
+            ->where('course_id', $course->id)
+            ->where('date', now()->format('Y-m-d'))->exists()
+        ) {
             return response()->json([
                 'message' => 'You made your attendace today',
             ], Response::HTTP_BAD_REQUEST);
@@ -96,7 +99,9 @@ class MainController extends Controller
         foreach ($meetings as $meeting) {
             $meetingStartsAt = $meeting->time;
             $meetingendtsAt = $meeting->time->addHour();
-            if (($meetingStartsAt >= $carbonObj && $meetingStartsAt <= $carbonObj->addHour()) || ($meetingendtsAt >= $carbonObj && $meetingendtsAt <= $carbonObj->addHour())) {
+            if (($meetingStartsAt >= $carbonObj && $meetingStartsAt <= $carbonObj->addHour()) ||
+                ($meetingendtsAt >= $carbonObj && $meetingendtsAt <= $carbonObj->addHour())
+            ) {
                 return response()->json([
                     'message' => 'There is a conflict in this time, please choose another time',
                 ], Response::HTTP_BAD_REQUEST);

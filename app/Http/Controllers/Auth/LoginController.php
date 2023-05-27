@@ -20,7 +20,11 @@ class LoginController extends Controller
 
     public function login(LoginRequest $request)
     {
-        $user = User::where('id', $request->input('email'))->orWhere('email', $request->input('email'))->first();
+        if (is_int($request->input('email'))) {
+            $user = User::where('id', $request->input('email'))->first();
+        } else {
+            $user = User::where('email', $request->input('email'))->first();
+        }
         if (!$user) {
             return response()->json([
                 'message' => 'Wrong login info.',
@@ -38,7 +42,6 @@ class LoginController extends Controller
         return response()->json([
             'message' => 'Logged in Successfully!',
         ], Response::HTTP_OK);
-
     }
 
     public function showRegister()
