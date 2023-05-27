@@ -15,7 +15,6 @@ class LoginController extends Controller
 {
     public function showLogin()
     {
-        dd(intval('asd'));
         return response()->view('crm.pages.auth.login');
     }
 
