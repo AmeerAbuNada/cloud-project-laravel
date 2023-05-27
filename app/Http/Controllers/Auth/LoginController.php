@@ -15,15 +15,16 @@ class LoginController extends Controller
 {
     public function showLogin()
     {
+        dd(intval('asd'));
         return response()->view('crm.pages.auth.login');
     }
 
     public function login(LoginRequest $request)
     {
-        if (is_int($request->input('email'))) {
-            $user = User::where('id', $request->input('email'))->first();
-        } else {
+        if (intval($request->input('email')) == 0) {
             $user = User::where('email', $request->input('email'))->first();
+        } else {
+            $user = User::where('id', $request->input('email'))->first();
         }
         if (!$user) {
             return response()->json([
